@@ -6,7 +6,7 @@
 // Sets default values
 AMyActor::AMyActor()
 {
-    currentPos = FVector2D(0, 0);
+
 }
 
 // Called when the game starts or when spawned
@@ -24,13 +24,25 @@ void AMyActor::Move()
 {
     for (int i = 0; i < MoveCount; i++)
     {
-        currentPos = FVector2D(currentPos.X + Step(), currentPos.Y + Step());
-        totalMoveCount++;
-
         UE_LOG(LogTemp, Log, TEXT("Start Move!!"));
+
+        FVector2D moveTargetPos = FVector2D(currentPos.X + Step(), currentPos.Y + Step());
+        float moveDistance = Distance(moveTargetPos, currentPos);
+        currentPos = moveTargetPos;
+        totalMoveCount++;
         UE_LOG(LogTemp, Log, TEXT("Current Pos X : %f, Pos Y : %f"), currentPos.X, currentPos.Y);
-        UE_LOG(LogTemp, Log, TEXT("Move Count : %d"), totalMoveCount);
+        UE_LOG(LogTemp, Log, TEXT("Move Distance : %f"), moveDistance);
+
+        TryTriggerEvent();
     }
+
+    PrintMoveResult();
+}
+
+void AMyActor::PrintMoveResult()
+{
+    float totalMoveDistance = Distance(currentPos, FVector2D(0, 0));
+    UE_LOG(LogTemp, Log, TEXT("Total Move Count : %d, Total Move Distance : %f, Total Event Count : %d"), totalMoveCount, totalMoveDistance, totalEventCount);
 }
 
 int AMyActor::Step()
@@ -38,3 +50,22 @@ int AMyActor::Step()
     return FMath::RandRange(0, 1);
 }
 
+float AMyActor::Distance(FVector2D first, FVector2D second)
+{
+    float dx = first.X - second.X;
+    float dy = first.Y - second.Y;
+    return FMath::Sqrt(dx * dx + dy * dy);
+}
+
+void AMyActor::TryTriggerEvent()
+{
+    if (Step())
+    {
+        UE_LOG(LogTemp, Error, TEXT("Event Triggered!!"));
+        totalEventCount++;
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Event Not Triggered!!"));
+    }
+}
