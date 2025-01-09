@@ -33,5 +33,6 @@ public:
 private:
 	FVector2D currentPos = FVector2D(0, 0);
 	int totalMoveCount = 0;
+	float totalMoveDistance = 0;
 	int totalEventCount = 0;
 };

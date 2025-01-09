@@ -28,8 +28,11 @@ void AMyActor::Move()
 
         FVector2D moveTargetPos = FVector2D(currentPos.X + Step(), currentPos.Y + Step());
         float moveDistance = Distance(moveTargetPos, currentPos);
-        currentPos = moveTargetPos;
+
+        totalMoveDistance += moveDistance;
         totalMoveCount++;
+
+        currentPos = moveTargetPos;
         UE_LOG(LogTemp, Log, TEXT("Current Pos X : %f, Pos Y : %f"), currentPos.X, currentPos.Y);
         UE_LOG(LogTemp, Log, TEXT("Move Distance : %f"), moveDistance);
 
@@ -41,7 +44,6 @@ void AMyActor::Move()
 
 void AMyActor::PrintMoveResult()
 {
-    float totalMoveDistance = Distance(currentPos, FVector2D(0, 0));
     UE_LOG(LogTemp, Log, TEXT("Total Move Count : %d, Total Move Distance : %f, Total Event Count : %d"), totalMoveCount, totalMoveDistance, totalEventCount);
 }
 
